@@ -1,0 +1,139 @@
+
+;;; Directives
+	PRESERVE8
+	THUMB
+; Vector Table Mapped to Address 0 at Reset
+; Linker requires __Vectors to be exported
+	AREA RESET, DATA, READONLY
+	EXPORT __Vectors
+__Vectors
+		DCD 0x20001000 ; stack pointer value when stack is empty
+	DCD Reset_Handler ; reset vector
+
+	ALIGN
+
+;Your Data section
+;AREA DATA
+Max DCD 0
+MaxP DCD Max
+Min DCD 0
+MinP DCD Min
+N DCD 12
+NUM1 DCD 3, -7, 2, -2, 10, 20, 30, 15, 32, 8, 64, 66
+POINTER DCD NUM1
+; The program
+; Linker requires Reset_Handler
+	AREA MYCODE, CODE, READONLY
+	ENTRY
+	EXPORT Reset_Handler
+
+Reset_Handler
+;;;;;;;;;;User Code Start from the next line;;;;;;;;;;;;;;;;;
+	MOV R6, #0 ;MAX accumulator
+
+ 
+	MOV R5, #0 ;MIN accumulator
+	
+	LDR R2, N ;COUNTER
+	LDR R3, POINTER ;Load starting address of array
+	
+LOOP
+	LDR R4, [R3], #4;- Retrieve list element in R4-
+	CMP R4, R6; Compare element with maximum number
+	BLT MIN ;MAX accumulator value IS BIGGER-Jump to MIN if not maximum-
+	MOV R6, R4 ; Transfer contents of R4 to RO as R4 > R0
+	SUBS R2, #1; DECREMENT COUNTER BY 1
+	BLE LOOPDONE
+	B LOOP
+MIN
+	CMP R4, R5  ;Compare element with MINIMUM number
+	BGT SKIP ;Jump to SKIP if not minimum
+	MOV R5, R4 ;Transfer contents of R4 to R1 if R4< minimum
+	SUBS R2, #1  ; DECREMENT COUNTER BY 1
+	BLE LOOPDONE
+	B LOOP
+SKIP
+	SUBS R2, #1  ; DECREMENT COUNTER BY 1
+	BGT LOOP
+
+LOOPDONE
+	LDR R8, MaxP  ; Load address to store MAXIMUM
+	STR R6, [R8] ;STORE MAX
+	
+	LDR R9, MinP   ; Load address to store MINIMUM
+	STR R5, [R9] ;STORE MIN
+   
+HERE B HERE
+	END
+
+/////////////////////////////
+
+
+;;; Directives
+	PRESERVE8
+	THUMB
+; Vector Table Mapped to Address 0 at Reset
+; Linker requires __Vectors to be exported
+	AREA RESET, DATA, READONLY
+	EXPORT __Vectors
+__Vectors
+		DCD 0x20001000 ; stack pointer value when stack is empty
+	DCD Reset_Handler ; reset vector
+
+	ALIGN
+
+;Your Data section
+;AREA DATA
+Max DCD 0
+MaxP DCD Max
+Min DCD 0
+MinP DCD Min
+N DCD 12
+NUM1 DCD 3, -7, 2, -2, 10, 20, 30, 15, 32, 8, 64, 66
+POINTER DCD NUM1
+; The program
+; Linker requires Reset_Handler
+	AREA MYCODE, CODE, READONLY
+	ENTRY
+	EXPORT Reset_Handler
+
+Reset_Handler
+;;;;;;;;;;User Code Start from the next line;;;;;;;;;;;;;;;;;
+	MOV R6, #0 ;MAX accumulator
+	MOV R5, #0 ;MIN accumulator
+	
+	LDR R2, N ;COUNTER
+	LDR R3, POINTER ;Load starting address of array
+	
+LOOP
+	LDR R4, [R3], #4;- Retrieve list element in R4-
+	CMP R4, R6; Compare element with maximum number
+	BLT MIN ;MAX accumulator value IS BIGGER-Jump to MIN if not maximum-
+	MOV R6, R4 ; Transfer contents of R4 to RO as R4 > R0
+	SUBS R2, #1; DECREMENT COUNTER BY 1
+	BLE LOOPDONE
+	B LOOP
+MIN
+	CMP R4, R5  ;Compare element with MINIMUM number
+	BGT SKIP ;Jump to SKIP if not minimum
+	MOV R5, R4 ;Transfer contents of R4 to R1 if R4< minimum
+	SUBS R2, #1  ; DECREMENT COUNTER BY 1
+	BLE LOOPDONE
+	B LOOP
+SKIP
+	SUBS R2, #1  ; DECREMENT COUNTER BY 1
+	BGT LOOP
+
+LOOPDONE
+	LDR R8, MaxP  ; Load address to store MAXIMUM
+	STR R6, [R8] ;STORE MAX
+	
+	
+	LDR R9, MinP   ; Load address to store MINIMUM
+	STR R5, [R9] ;STORE MIN
+    
+HERE B HERE
+	END
+
+
+

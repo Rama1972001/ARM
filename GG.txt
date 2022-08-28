@@ -1,0 +1,129 @@
+	;When you write your program, you could have your info at the top document lock
+	;For Example: Your Name, Student Number, what the program is for, and what it does 
+
+	;;; Directives
+	 PRESERVE8
+	 THUMB 
+	; Vector Table Mapped to Address 0 at Reset
+	; Linker requires __Vectors to be exported
+	 AREA RESET, DATA, READONLY
+	 EXPORT __Vectors
+__Vectors 
+	 DCD 0x20001000 ; stack pointer value when stack is empty
+	 DCD Reset_Handler ; reset vector
+	 
+	 ALIGN
+	 
+	;Your Data section
+	;AREA DATA
+SUM DCD 0
+SUMP DCD SUM
+N DCD 7
+NUM DCD 3, -7, 2, -2, 10, 20, 30
+POINTER DCD NUM
+	; The program
+	; Linker requires Reset_Handler
+	 AREA MYCODE, CODE, READONLY
+ ENTRY
+	 EXPORT Reset_Handler
+Reset_Handler
+
+; Please complete the program to add up all the
+; numbers in the array NUM1 that are greater than 5.
+; Put the sum in the register R0.
+    LDR R1, N ; load size of array -
+; a counter for how many elements are left to process
+    LDR R2, POINTER ; load base pointer of array
+    MOV R0, #0 ; initialize 
+	MOV R5, #5 ; initialize 
+	ADD R1,R1,#1
+LOOP
+    LDR R3, [R2], #4
+	SUBS R1,R1,#1
+	CBZ R1, STOP
+	CMP R3,R5
+	BGT ADDITION
+	B LOOP
+ADDITION
+    ADD R0,R0,R3
+	B LOOP
+ 
+STOP
+      B STOP
+    END ; End of the program
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;When you write your program, you could have your info at the top document lock
+	;For Example: Your Name, Student Number, what the program is for, and what it does 
+
+	;;; Directives
+	 PRESERVE8
+	 THUMB 
+	; Vector Table Mapped to Address 0 at Reset
+	; Linker requires __Vectors to be exported
+	 AREA RESET, DATA, READONLY
+	 EXPORT __Vectors
+__Vectors 
+	 DCD 0x20001000 ; stack pointer value when stack is empty
+	 DCD Reset_Handler ; reset vector
+	 
+	 ALIGN
+	 
+	;Your Data section
+	;AREA DATA
+SUM DCD 0
+SUMP DCD SUM
+N DCD 7
+NUM DCD 3, -7, 2, -2, 10, 20, 30
+POINTER DCD NUM
+	; The program
+	; Linker requires Reset_Handler
+	 AREA MYCODE, CODE, READONLY
+ ENTRY
+	 EXPORT Reset_Handler
+Reset_Handler
+
+; Please complete the program to add up all the
+; numbers in the array NUM1 that are greater than 5.
+; Put the sum in the register R0.
+    LDR R1, N ; load size of array -
+; a counter for how many elements are left to process
+    LDR R2, POINTER ; load base pointer of array
+    MOV R0, #0 ; initialize 
+	MOV R5, #5 ; initialize 
+LOOP
+    LDR R3, [R2], #4
+	CMP R3,R5
+	blt SKIP 
+	ADD R0,R0,R3
+SKIP
+    SUBS R1,R1,#1
+	BGT LOOP
+    LDR R4,SUMP
+	STR R0,[R4]
+	LDR R6,[R4]
+	
+STOP
+	B STOP
+	
+	END ; End of the program
+
+
+
+
+We loaded the size of array (which considered as counter for how many elements are left to 
+process)
+we loaded the base pointer of array and initialized the accumulator to zero 
+we entered loop , in this loop the program keep loading the 
+values from array , when loading a value , increment array pointer to the next word 
+and comparing each value with the decimal number 5 using cmp
+if it is greater than 5 it will be added from array to accumulator 
+
+and the counter will decreasing by 1 with each value checked.
+keep looping till counter become zero 
+then get the memory vaddress to store sum.
+the answer will be stored in r4
+and to check the value in sum the sum will be loaded from r4 to r6 
